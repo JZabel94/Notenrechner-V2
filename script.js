@@ -19,13 +19,27 @@ const GRADE_SCALE = [
   { min: 0, max: 25, grade: '6' },
 ];
 
-function getGrade(percent) {
+function lookupGrade(value) {
   for (const entry of GRADE_SCALE) {
-    if (percent >= entry.min && percent <= entry.max) {
+    if (value >= entry.min && value <= entry.max) {
       return entry.grade;
     }
   }
   return '—';
+}
+
+function getGrade(percent) {
+  const rounded = Math.round(percent);
+  const isHalf = Math.abs(percent - Math.floor(percent) - 0.5) < 0.0001;
+
+  if (isHalf) {
+    const lower = lookupGrade(Math.floor(percent));
+    const upper = lookupGrade(Math.ceil(percent));
+    if (lower === upper) return lower;
+    return lower + ' / ' + upper;
+  }
+
+  return lookupGrade(rounded);
 }
 
 function calculate() {
@@ -40,22 +54,19 @@ function calculate() {
 
   const percent = (achieved / total) * 100;
   const clamped = Math.max(0, Math.min(100, percent));
-  const rounded = Math.round(clamped * 100) / 100;
 
-  percentageEl.textContent = rounded.toFixed(2) + '%';
-  gradeEl.textContent = getGrade(rounded);
+  percentageEl.textContent = clamped.toFixed(2) + '%';
+  gradeEl.textContent = getGrade(clamped);
 }
 
 totalPointsInput.addEventListener('input', calculate);
 achievedPointsInput.addEventListener('input', calculate);
 
-// Restore saved values on load
 const savedTotal = localStorage.getItem('notenrechner_total');
 const savedAchieved = localStorage.getItem('notenrechner_achieved');
 if (savedTotal !== null) totalPointsInput.value = savedTotal;
 if (savedAchieved !== null) achievedPointsInput.value = savedAchieved;
 
-// Save values on change
 function saveValues() {
   localStorage.setItem('notenrechner_total', totalPointsInput.value);
   localStorage.setItem('notenrechner_achieved', achievedPointsInput.value);
@@ -64,7 +75,6 @@ function saveValues() {
 totalPointsInput.addEventListener('change', saveValues);
 achievedPointsInput.addEventListener('change', saveValues);
 
-// Run initial calculation if values exist
 if (savedTotal !== null || savedAchieved !== null) {
   calculate();
 }
