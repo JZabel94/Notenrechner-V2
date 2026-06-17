@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notenrechner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Notenrechner</h1>
+    <div class="input-group">
+      <label for="totalPoints">Zu erreichende Gesamtpunktzahl</label>
+      <input type="number" id="totalPoints" min="1" step="any" placeholder="z. B. 100">
+    </div>
+    <div class="input-group">
+      <label for="achievedPoints">Erreichte Punkte</label>
+      <input type="number" id="achievedPoints" min="0" step="any" placeholder="z. B. 85">
+    </div>
+    <div class="output">
+      <div class="result-item">
+        <span class="label">Erreichte Prozent</span>
+        <span class="value" id="percentage">—</span>
+      </div>
+      <div class="result-item">
+        <span class="label">Note</span>
+        <span class="value grade" id="grade">—</span>
+      </div>
+    </div>
+    <div class="grade-table">
+      <h2>Notenspiegel</h2>
+      <img src="Notenspiegel.jpeg" alt="Notenspiegel">
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
